@@ -14,7 +14,7 @@ import Loader from "./Loader";
 import ErrorMessage from "./ErrorMessage";
 import MovieDetails from "./MovieDetails";
 
-const key = '50c2d22f';
+const KEY = '50c2d22f';
 
 export default function App() {
   
@@ -37,7 +37,7 @@ export default function App() {
   const fetchMovies = async () => {
     try {
     setIsLoading(true);
-    const res = await fetch(`http://www.omdbapi.com/?i=tt3896198&apikey=${key}&s=${query}`);
+    const res = await fetch(`http://www.omdbapi.com?apikey=${KEY}&s=${query}`);
 
     if(!res.ok) throw new Error("Something went wrong with fetching movies");
 
@@ -69,7 +69,7 @@ export default function App() {
           {error && <ErrorMessage message={error} /> }
         </Box> 
         <Box>
-          {selectedId? <MovieDetails selectedId={selectedId} setSelectedId={setSelectedId} />
+          {selectedId? <MovieDetails KEY={KEY} selectedId={selectedId} setSelectedId={setSelectedId} />
           : (
           <>
               <WatchedSummary watched={watched} />
