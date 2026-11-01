@@ -21,6 +21,15 @@ function MovieDetails({ KEY, selectedId, setSelectedId, onAddClick, watched }) {
     Genre: genre,
   } = movie;
 
+  useEffect(() => {
+    if(!title) return;
+    document.title = `Movie | ${title}`;
+    return () => {
+      document.title = "usePopcorn";
+    }
+  }
+  , [title]);
+
   function onCloseMovie() {
     setSelectedId("");
   }
