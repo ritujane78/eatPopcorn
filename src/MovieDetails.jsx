@@ -29,6 +29,17 @@ function MovieDetails({ KEY, selectedId, setSelectedId, onAddClick, watched }) {
     }
   }
   , [title]);
+  useEffect(() => {
+    const callback = (e) => {
+      if(e.code === "Escape") {
+        onCloseMovie();
+      }
+    }
+    document.addEventListener("keydown", callback);
+    return () => {
+      document.removeEventListener("keydown", callback);
+    }
+  }, []);
 
   function onCloseMovie() {
     setSelectedId("");
