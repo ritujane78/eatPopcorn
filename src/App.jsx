@@ -18,11 +18,11 @@ const KEY = '50c2d22f';
 
 export default function App() {
   
-  const [movies, setMovies] = useState(tempMovieData);
-  const [watched, setWatched] = useState(tempWatchedData);
+  const [movies, setMovies] = useState([]);
+  const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(false);
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState("inception");
   const [selectedId, setSelectedId] = useState("");
   useEffect(() => {
     if(query.length < 3){
@@ -52,8 +52,14 @@ export default function App() {
       setIsLoading(false);
     }
   }
-  
+  function handleWatched (newMovie){
+    setWatched([...watched, newMovie]);
 
+  }
+  function handleWatchedDelete(id){
+    const updatedWatched = watched.filter((movie) => movie.imdbID !== id);
+    setWatched(updatedWatched);
+  }
   return (
     <>
       <Navbar>
@@ -69,12 +75,12 @@ export default function App() {
           {error && <ErrorMessage message={error} /> }
         </Box> 
         <Box>
-          {selectedId? <MovieDetails KEY={KEY} selectedId={selectedId} setSelectedId={setSelectedId} />
+          {selectedId? <MovieDetails KEY={KEY} onAddClick = {handleWatched} selectedId={selectedId} setSelectedId={setSelectedId} watched={watched} />
           : (
           <>
               <WatchedSummary watched={watched} />
 
-              <WatchedMovieList watched={watched} />
+              <WatchedMovieList watched={watched} onDelete = {handleWatchedDelete}/>
             </>
             )}
         </Box>
