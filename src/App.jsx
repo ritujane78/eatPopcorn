@@ -13,6 +13,7 @@ import ErrorMessage from "./ErrorMessage";
 import MovieDetails from "./MovieDetails";
 import { useMovies } from "./useMovies";
 import { useLocalStorageState } from "./useLocalStorageState";
+import { useKey } from "./useKey";
 
 const KEY = "50c2d22f";
 
@@ -86,6 +87,8 @@ export default function App() {
   function onCloseMovie() {
     setSelectedId(null);
   }
+
+  useKey("Escape", onCloseMovie);
 
   return (
     <>
