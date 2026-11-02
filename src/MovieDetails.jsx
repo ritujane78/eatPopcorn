@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import StarRating from "./StarRating";
 import Loader from "./Loader";
 
-function MovieDetails({ KEY, selectedId, setSelectedId, onAddClick, watched }) {
+function MovieDetails({ KEY, selectedId, handleCloseMovie, onAddClick, watched }) {
   const [movie, setMovie] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [userRating, setUserRating] = useState("");
@@ -37,7 +37,7 @@ function MovieDetails({ KEY, selectedId, setSelectedId, onAddClick, watched }) {
   useEffect(() => {
     const callback = (e) => {
       if(e.code === "Escape") {
-        onCloseMovie();
+        handleCloseMovie();
       }
     }
     document.addEventListener("keydown", callback);
@@ -46,9 +46,6 @@ function MovieDetails({ KEY, selectedId, setSelectedId, onAddClick, watched }) {
     }
   }, []);
 
-  function onCloseMovie() {
-    setSelectedId("");
-  }
   useEffect(
     function () {
       async function getMovieDetails() {
@@ -75,7 +72,7 @@ function MovieDetails({ KEY, selectedId, setSelectedId, onAddClick, watched }) {
       userRating,
       userRatingCount: countRef.current,
     };
-    onCloseMovie();
+    handleCloseMovie();
     onAddClick(newWatchdAdd);
   }
   return (
@@ -85,7 +82,7 @@ function MovieDetails({ KEY, selectedId, setSelectedId, onAddClick, watched }) {
       ) : (
         <>
           <header>
-            <button className="btn-back" onClick={onCloseMovie}>
+            <button className="btn-back" onClick={handleCloseMovie}>
               &larr;
             </button>
             <img src={poster} alt={`Poster of ${movie} movie`} />

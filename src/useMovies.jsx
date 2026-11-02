@@ -1,0 +1,63 @@
+import {useState, useEffect} from 'react'
+
+const KEY = "50c2d22f";
+
+export function useMovies(query, onCloseMovie) {
+    const [movies, setMovies] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState("");
+
+    useEffect(() => {
+        if (query.length < 3) {
+        setMovies([]);
+        setError("");
+        setIsLoading(false);
+        return;
+        }
+
+        const controller = new AbortController();
+
+        async function fetchMovies() {
+        try {
+            setIsLoading(true);
+            setError("");
+
+            const res = await fetch(
+            `http://www.omdbapi.com?apikey=${KEY}&s=${query}`,
+            { signal: controller.signal }
+            );
+
+            if (!res.ok) {
+            throw new Error("Something went wrong with fetching movies");
+            }
+
+            const data = await res.json();
+
+            if (data.Response === "False") {
+            throw new Error("Movie not found.");
+            }
+
+            setMovies(data.Search);
+        } catch (error) {
+            if (error.name !== "AbortError") {
+            console.error(error.message);
+            setError(error.message);
+            setMovies([]);
+            }
+        } finally {
+            if (!controller.signal.aborted) {
+            setIsLoading(false);
+            }
+        }
+        }
+        onCloseMovie();
+
+        fetchMovies();
+
+        return () => {
+        controller.abort();
+        };
+    }, [query]);
+    return {movies, isLoading, error};
+}
+
